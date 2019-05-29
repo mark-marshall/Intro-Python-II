@@ -47,7 +47,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 player_selection = str(input("Type your player's name here: "))
-player = Player(player_selection, "outside")
+player = Player(player_selection, "outside", [items['sword'])
 
 # initialise the selection to empty
 direction_selection = ""
@@ -66,7 +66,7 @@ while direction_selection != "q":
     # * Prints the current description (the textwrap module might be useful here).
     print(room[player.location].description)
     # Gets user input
-    direction_selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [q] Quit\n"))
+    direction_selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\n"))
     # If the user enters a cardinal direction, attempts to move to the room there.
     if direction_selection == "n" or direction_selection == "e" or direction_selection == "s" or direction_selection == "w":
         if new_location_check(direction_selection, room[player.location]):
@@ -75,6 +75,11 @@ while direction_selection != "q":
         else: 
             print(f"{player.name} tries to head {direction_selection} but doesn't find anything.")
     # If the user enters "q", quit the game.
+    elif direction_selection == "i":
+        if len(player.items) > 0:
+            print([item.name for item in player.items])
+        else:
+            print(f"{player.name}'s inventory is empty :(")
     elif direction_selection == "q":
         print(f"Thanks for playing {player.name}")
     # Print an error message if a non-valid key is entered
