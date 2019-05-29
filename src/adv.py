@@ -68,7 +68,7 @@ while direction_selection != "q":
     # Gets user input
     direction_selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [q] Quit\n"))
     # If the user enters a cardinal direction, attempts to move to the room there.
-    if direction_selection == ("n" or "e" or "s" or "w"):
+    if direction_selection == "n" or direction_selection == "e" or direction_selection == "s" or direction_selection == "w":
         if new_location_check(direction_selection, room[player.location]):
             player.location = new_location_check(direction_selection, room[player.location]).key
             print(f"{player.name} heads {direction_selection} and enters {player.location}")
