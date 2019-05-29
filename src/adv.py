@@ -1,5 +1,6 @@
 from room import Room
 from  player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -34,9 +35,18 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
-# Main
-#
+
+# Declare all the items
+
+items = {
+    'sword':   Item("sword", "shimmering and glorious"),
+    'peach':   Item("peach", "tasty"),
+    'literature':   Item("literature", "all of the knowledge"),
+    'banana':   Item("banana", "potassium hit"),
+    'shield':   Item("shield", "top protection while napping"),
+    'laptop':   Item("laptop", "hack the adv to be more fun"),
+}
+
 
 # Make a new player object that is currently in the 'outside' room.
 player_selection = str(input("Type your player's name here: "))
