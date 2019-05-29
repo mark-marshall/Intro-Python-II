@@ -47,7 +47,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 player_selection = str(input("Type your player's name here: "))
-player = Player(player_selection, "outside", [items['sword'])
+player = Player(player_selection, "outside", [items['sword']])
 
 # initialise the selection to empty
 direction_selection = ""
@@ -55,7 +55,6 @@ direction_selection = ""
 # check direction legibility
 def new_location_check(direction, current_location):
     attr = f"{direction}_to"
-
     if hasattr(current_location, attr):
         return getattr(current_location, attr)
 
@@ -69,8 +68,9 @@ while direction_selection != "q":
     direction_selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\n"))
     # If the user enters a cardinal direction, attempts to move to the room there.
     if direction_selection == "n" or direction_selection == "e" or direction_selection == "s" or direction_selection == "w":
-        if new_location_check(direction_selection, room[player.location]):
-            player.location = new_location_check(direction_selection, room[player.location]).key
+        new_location = new_location_check(direction_selection, room[player.location])
+        if new_location:
+            player.location = new_location.key
             print(f"{player.name} heads {direction_selection} and enters {player.location}")
         else: 
             print(f"{player.name} tries to head {direction_selection} but doesn't find anything.")
