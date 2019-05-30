@@ -58,6 +58,9 @@ def new_location_check(direction, current_location):
     if hasattr(current_location, attr):
         return getattr(current_location, attr)
 
+def item_in_room_check(item, current_location):
+    
+
 # add while condition
 while selection != "q":
     # * Prints the current room name
@@ -69,7 +72,7 @@ while selection != "q":
     parse_selection = selection.split(' ')
     #if the user enters just 1 word assume its a direction, inventory, or quit
     if len(parse_selection) == 1:
-        # If the user enters a cardinal direction, attempts to move to the room there.
+        # if the user enters a cardinal direction, attempts to move to the room there.
         if selection == "n" or selection == "e" or selection == "s" or selection == "w":
             new_location = new_location_check(selection, player.location)
             if new_location:
@@ -88,12 +91,20 @@ while selection != "q":
         # Print an error message if a non-valid key is entered
         else:
             print(f"{player.name} made an invalid selection, try again!")
-    #if the user enters 2 words determine whether its a drop or a get
+    # if the user enters 2 words determine whether its a drop or a get
     elif len(parse_selection) == 2:
         if parse_selection[0] == "get":
+            # check to see if the item is in the room
+            # remove item from the room and add it to the player inventory
+            # call the on_take method to print to player the result
+            # if the room does not contain the item, return the error
             print('this is a get item request')
-        elif parse_selection[0] == "take":
-            print('this is a take item request')
+        elif parse_selection[0] == "drop":
+            # check to see if the item is in the players inventory
+            # remove item from the players inventory and add it to the room
+            # call the on_drop method to print to player the result
+            # if the player does not have the item, return the error
+            print('this is a drop item request')
         else:
             print(f"{player.name} made an invalid command, try again!")
     else:
