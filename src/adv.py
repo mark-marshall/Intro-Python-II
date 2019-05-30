@@ -17,7 +17,7 @@ items = {
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons", [items['sword']]),
+                     "North of you, the cave mount beckons", [items['peach']]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east.""", []),
@@ -27,7 +27,7 @@ into the darkness. Ahead to the north, a light flickers in
 the distance, but there is no way across the chasm.""", [items['laptop'], items['shield']]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air.""", [items['peach'], items['banana']]),
+to north. The smell of gold permeates the air.""", [items['banana']]),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
@@ -58,8 +58,14 @@ def new_location_check(direction, current_location):
     if hasattr(current_location, attr):
         return getattr(current_location, attr)
 
-def item_in_room_check(item, current_location):
-    
+def take_item(item_selection, current_player):
+    # check to see if the item is in the room
+    for item in current_player.location.items:
+        if item.name == item_selection:
+            # if the item is in the room add it to the players inventory and remove it from the room list
+            current_player.items.append(item)
+            current_player.location.items = [item for item in current_player.location.items if item.name != item_selection]
+            return True
 
 # add while condition
 while selection != "q":
@@ -68,7 +74,7 @@ while selection != "q":
     # * Prints the current description (the textwrap module might be useful here).
     print(player.location.description)
     # Gets user input
-    selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\nOr enter get item/take item\n"))
+    selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\nOr enter get item/drop item\n"))
     parse_selection = selection.split(' ')
     #if the user enters just 1 word assume its a direction, inventory, or quit
     if len(parse_selection) == 1:
@@ -94,11 +100,14 @@ while selection != "q":
     # if the user enters 2 words determine whether its a drop or a get
     elif len(parse_selection) == 2:
         if parse_selection[0] == "get":
-            # check to see if the item is in the room
-            # remove item from the room and add it to the player inventory
-            # call the on_take method to print to player the result
-            # if the room does not contain the item, return the error
-            print('this is a get item request')
+            # process the request in the take_item function
+            res = take_item(parse_selection[1], player)
+            # if sucessful, call the on_take method to print to player the result
+            if res:
+                print(items[parse_selection[1]].on_take())
+            # if unsucessful, print the error
+            else:
+                print(f"{player.location.name} does not contain {parse_selection[1]}")
         elif parse_selection[0] == "drop":
             # check to see if the item is in the players inventory
             # remove item from the players inventory and add it to the room
