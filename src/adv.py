@@ -65,23 +65,36 @@ while selection != "q":
     # * Prints the current description (the textwrap module might be useful here).
     print(player.location.description)
     # Gets user input
-    selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\n"))
-    # If the user enters a cardinal direction, attempts to move to the room there.
-    if selection == "n" or selection == "e" or selection == "s" or selection == "w":
-        new_location = new_location_check(selection, player.location)
-        if new_location:
-            player.location = new_location
-            print(f"{player.name} heads {selection} and enters {player.location.name}")
-        else: 
-            print(f"{player.name} tries to head {selection} but doesn't find anything.")
-    # If the user enters "q", quit the game.
-    elif selection == "i":
-        if len(player.items) > 0:
-            print([item.name for item in player.items])
+    selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\nOr enter get item/take item\n"))
+    parse_selection = selection.split(' ')
+    #if the user enters just 1 word assume its a direction, inventory, or quit
+    if len(parse_selection) == 1:
+        # If the user enters a cardinal direction, attempts to move to the room there.
+        if selection == "n" or selection == "e" or selection == "s" or selection == "w":
+            new_location = new_location_check(selection, player.location)
+            if new_location:
+                player.location = new_location
+                print(f"{player.name} heads {selection} and enters {player.location.name}")
+            else: 
+                print(f"{player.name} tries to head {selection} but doesn't find anything.")
+        # If the user enters "q", quit the game.
+        elif selection == "i":
+            if len(player.items) > 0:
+                print([item.name for item in player.items])
+            else:
+                print(f"{player.name}'s inventory is empty :(")
+        elif selection == "q":
+            print(f"Thanks for playing {player.name}")
+        # Print an error message if a non-valid key is entered
         else:
-            print(f"{player.name}'s inventory is empty :(")
-    elif selection == "q":
-        print(f"Thanks for playing {player.name}")
-    # Print an error message if a non-valid key is entered
+            print(f"{player.name} made an invalid selection, try again!")
+    #if the user enters 2 words determine whether its a drop or a get
+    elif len(parse_selection) == 2:
+        if parse_selection[0] == "get":
+            print('this is a get item request')
+        elif parse_selection[0] == "take":
+            print('this is a take item request')
+        else:
+            print(f"{player.name} made an invalid command, try again!")
     else:
-        print(f"{player.name} made an invalid selection, try again!")
+        print(f"{player.name} tried an invalid input.")
