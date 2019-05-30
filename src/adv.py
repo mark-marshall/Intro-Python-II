@@ -50,7 +50,7 @@ player_selection = str(input("Type your player's name here: "))
 player = Player(player_selection, room['outside'], [items['sword']])
 
 # initialise the selection to empty
-direction_selection = ""
+selection = ""
 
 # check direction legibility
 def new_location_check(direction, current_location):
@@ -59,28 +59,28 @@ def new_location_check(direction, current_location):
         return getattr(current_location, attr)
 
 # add while condition
-while direction_selection != "q":
+while selection != "q":
     # * Prints the current room name
     print(player.location.name)
     # * Prints the current description (the textwrap module might be useful here).
     print(player.location.description)
     # Gets user input
-    direction_selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\n"))
+    selection = str(input("Choose a direction to head: [n] North [e] East [s] South [w] West [i] inventory [q] Quit\n"))
     # If the user enters a cardinal direction, attempts to move to the room there.
-    if direction_selection == "n" or direction_selection == "e" or direction_selection == "s" or direction_selection == "w":
-        new_location = new_location_check(direction_selection, player.location)
+    if selection == "n" or selection == "e" or selection == "s" or selection == "w":
+        new_location = new_location_check(selection, player.location)
         if new_location:
             player.location = new_location
-            print(f"{player.name} heads {direction_selection} and enters {player.location.name}")
+            print(f"{player.name} heads {selection} and enters {player.location.name}")
         else: 
-            print(f"{player.name} tries to head {direction_selection} but doesn't find anything.")
+            print(f"{player.name} tries to head {selection} but doesn't find anything.")
     # If the user enters "q", quit the game.
-    elif direction_selection == "i":
+    elif selection == "i":
         if len(player.items) > 0:
             print([item.name for item in player.items])
         else:
             print(f"{player.name}'s inventory is empty :(")
-    elif direction_selection == "q":
+    elif selection == "q":
         print(f"Thanks for playing {player.name}")
     # Print an error message if a non-valid key is entered
     else:
