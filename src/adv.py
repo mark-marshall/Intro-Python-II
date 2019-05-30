@@ -67,6 +67,15 @@ def take_item(item_selection, current_player):
             current_player.location.items = [item for item in current_player.location.items if item.name != item_selection]
             return True
 
+def drop_item(item_selection, current_player):
+    # check to see if the item is in the players inventory
+    for item in current_player.items:
+        if item.name == item_selection:
+            # if the item is in the players inventory, add it to the rooms item list and remove it from the player
+            current_player.location.items.append(item)
+            current_player.items = [item for item in current_player.items if item.name != item_selection]
+            return True
+
 # add while condition
 while selection != "q":
     # * Prints the current room name
@@ -101,19 +110,22 @@ while selection != "q":
     elif len(parse_selection) == 2:
         if parse_selection[0] == "get":
             # process the request in the take_item function
-            res = take_item(parse_selection[1], player)
+            take_res = take_item(parse_selection[1], player)
             # if sucessful, call the on_take method to print to player the result
-            if res:
+            if take_res:
                 print(items[parse_selection[1]].on_take())
             # if unsucessful, print the error
             else:
                 print(f"{player.location.name} does not contain {parse_selection[1]}")
         elif parse_selection[0] == "drop":
-            # check to see if the item is in the players inventory
-            # remove item from the players inventory and add it to the room
-            # call the on_drop method to print to player the result
-            # if the player does not have the item, return the error
-            print('this is a drop item request')
+            # process the request in the drop_item function
+            drop_res = drop_item(parse_selection[1], player)
+            # if sucessful, call the on_drop method to print to player the result
+            if drop_res:
+                print(items[parse_selection[1]].on_drop())
+            # if unsucessful, print the error
+            else:
+                print(f"{player.name} does not have {parse_selection[1]}")
         else:
             print(f"{player.name} made an invalid command, try again!")
     else:
